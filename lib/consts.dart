@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:marcosmhs/features/main/theme_data.dart';
+import 'package:marcosmhs/theme_data.dart';
 
 class Consts {
   static String get siteName => 'marcosmhs';
 
   static Color get stdBackgroundColor => thatExoticBugTheme.colorScheme.background;
+  static Color get stdSecundaryBackgroundColor => thatExoticBugTheme.canvasColor;
   static Color get stdSpecialColor => thatExoticBugTheme.colorScheme.secondary;
   static Color get stdRegularFontColor => thatExoticBugTheme.primaryColorLight;
   static Color get stdSpecialFontColor => thatExoticBugTheme.colorScheme.primary;
