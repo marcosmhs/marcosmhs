@@ -5,10 +5,10 @@ import 'package:marcosmhs/features/public_area/routes.dart';
 import 'package:marcosmhs/features/admin_area/user/user.dart';
 import 'package:marcosmhs/features/admin_area/user/user_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:teb_package/messaging/teb_custom_message.dart';
+import 'package:teb_package/control_widgets/teb_buttons_line.dart';
+import 'package:teb_package/control_widgets/teb_text_edit.dart';
+import 'package:teb_package/messaging/teb_message.dart';
 import 'package:teb_package/util/teb_return.dart';
-import 'package:teb_package/visual_elements/teb_buttons_line.dart';
-import 'package:teb_package/visual_elements/teb_text_form_field.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({super.key});
@@ -43,17 +43,17 @@ class _UserFormState extends State<UserForm> {
       // salva os dados
       _formKey.currentState?.save();
       var userController = UserController();
-      TebCustomReturn retorno;
+      TebReturn retorno;
       try {
         retorno = await userController.save(user: _user);
         if (retorno.returnType == TebReturnType.sucess) {
-          TebCustomMessage.sucess(context, message: 'Dados Alterado com sucesso');
+          TebMessage.success(context, message: 'Dados Alterado com sucesso');
           Navigator.of(context).pushReplacementNamed(Routes.mainScreen, arguments: {'user': _user});
         }
 
         // se houve um erro no login ou no cadastro exibe o erro
         if (retorno.returnType == TebReturnType.error) {
-          TebCustomMessage.error(context, message: retorno.message);
+          TebMessage.error(context, message: retorno.message);
         }
       } finally {
         _saveingData = false;
@@ -88,7 +88,6 @@ class _UserFormState extends State<UserForm> {
             children: [
               // name
               TebTextEdit(
-                context: context,
                 controller: _nameController,
                 labelText: 'Nome',
                 hintText: 'Informe seu nome',
@@ -105,7 +104,6 @@ class _UserFormState extends State<UserForm> {
               ),
               // registration
               TebTextEdit(
-                context: context,
                 controller: _emailController,
                 labelText: 'Email',
                 hintText: 'Seu e-mail',
@@ -123,7 +121,6 @@ class _UserFormState extends State<UserForm> {
               ),
               // password
               TebTextEdit(
-                context: context,
                 controller: _passwordController,
                 labelText: 'Senha',
                 hintText: 'Informe sua senha',
@@ -151,7 +148,6 @@ class _UserFormState extends State<UserForm> {
               ),
               // password confirmation
               TebTextEdit(
-                context: context,
                 controller: _confirmPasswordController,
                 labelText: 'Repita a senha',
                 hintText: 'Informe sua senha novamente',

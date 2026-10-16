@@ -10,7 +10,10 @@ class SiteMainDataController with ChangeNotifier {
       return SiteMainData(siteName: Consts.siteName);
     }
 
-    final userDataRef = await FirebaseFirestore.instance.collection(FirebaseConsts.mainDataCollectionName).doc(siteName).get();
+    final userDataRef = await FirebaseFirestore.instance
+        .collection(FirebaseConsts.mainDataCollectionName)
+        .doc(siteName)
+        .get();
     final userData = userDataRef.data();
 
     if (userData == null) {
@@ -20,7 +23,7 @@ class SiteMainDataController with ChangeNotifier {
     return SiteMainData.fromMap(map: userData);
   }
 
-  Future<TebCustomReturn> save({required SiteMainData mainData}) async {
+  Future<TebReturn> save({required SiteMainData mainData}) async {
     try {
       mainData.updateDate = DateTime.now();
 
@@ -29,9 +32,9 @@ class SiteMainDataController with ChangeNotifier {
           .doc(mainData.siteName)
           .set(mainData.toMap);
 
-      return TebCustomReturn.sucess;
+      return TebReturn.success;
     } catch (e) {
-      return TebCustomReturn.error(e.toString());
+      return TebReturn.error(e.toString());
     }
   }
 }

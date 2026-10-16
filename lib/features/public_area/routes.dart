@@ -1,4 +1,5 @@
 class Routes {
+  static const homeScreen = 'home_screen';
   static const landingScreen = 'landing_screen';
   static const internalLandingScreen = 'internal_landing_screen';
   static const mainScreen = 'main_screen';
@@ -12,5 +13,6 @@ class Routes {
   static const siteAboutMeTechnologiesForm = 'about_me_technologies_form';
   static const experienceForm = 'experience_form';
   static const articleForm = 'article_form';
+  static const contentForm = 'content_form';
   static const projectForm = 'project_form';
 }

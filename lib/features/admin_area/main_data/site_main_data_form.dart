@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:marcosmhs/features/admin_area/site_publisher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marcosmhs/consts.dart';
 import 'package:marcosmhs/features/admin_area/main_area_structure.dart';
@@ -9,9 +10,9 @@ import 'package:marcosmhs/features/admin_area/main_data/site_main_data.dart';
 import 'package:marcosmhs/features/admin_area/main_data/site_main_data_controller.dart';
 import 'package:marcosmhs/features/admin_area/widgets/site_property_widget.dart';
 import 'package:marcosmhs/features/admin_area/user/user.dart';
-import 'package:teb_package/messaging/teb_custom_message.dart';
+import 'package:teb_package/control_widgets/teb_buttons_line.dart';
+import 'package:teb_package/messaging/teb_message.dart';
 import 'package:teb_package/util/teb_return.dart';
-import 'package:teb_package/visual_elements/teb_buttons_line.dart';
 
 class SiteMainDataForm extends StatefulWidget {
   const SiteMainDataForm({super.key});
@@ -39,17 +40,18 @@ class _SiteMainDataFormState extends State<SiteMainDataForm> {
       // salva os dados
       _formKey.currentState?.save();
       var siteMainDataController = SiteMainDataController();
-      TebCustomReturn retorno;
+      TebReturn retorno;
       try {
         retorno = await siteMainDataController.save(mainData: _siteMainData);
         if (retorno.returnType == TebReturnType.sucess) {
-          TebCustomMessage.sucess(context, message: 'Dados alterados com sucesso');
+          TebMessage.success(context, message: 'Dados alterados com sucesso');
+          SitePublisher.instance.requestPublish();
           Navigator.of(context).pushReplacementNamed(Routes.mainScreen, arguments: {'user': _user});
         }
 
         // se houve um erro no login ou no cadastro exibe o erro
         if (retorno.returnType == TebReturnType.error) {
-          TebCustomMessage.error(context, message: retorno.message);
+          TebMessage.error(context, message: retorno.message);
         }
       } finally {
         _saveingData = false;
@@ -92,58 +94,11 @@ class _SiteMainDataFormState extends State<SiteMainDataForm> {
                 ),
                 TebButton(
                   label: 'Salvar',
-                  icon: FaIcon(FontAwesomeIcons.floppyDisk, color: Theme.of(context).colorScheme.background),
+                  icon: FaIcon(FontAwesomeIcons.floppyDisk,
+                      color: Theme.of(context).colorScheme.surface),
                   onPressed: () => _submit(),
                 ),
               ],
-            ),
-            const SizedBox(height: 10),
-            // background color
-            SiteProperty(
-              context: context,
-              size: size,
-              sitePropertyTypes: const [SitePropertyType.color],
-              propertyTitle: 'Cor de fundo (background)',
-              propertyColor: _siteMainData.backgroundColor,
-              onChangedPropertyColor: (selectedColor) => _siteMainData.backgroundColor = selectedColor!,
-            ),
-            SiteProperty(
-              context: context,
-              size: size,
-              sitePropertyTypes: const [SitePropertyType.color],
-              propertyTitle: 'Cor de fundo secundária',
-              propertyColor: _siteMainData.secundaryBackgroundColor,
-              onChangedPropertyColor: (selectedColor) => _siteMainData.secundaryBackgroundColor = selectedColor!,
-            ),
-            const SizedBox(height: 10),
-            // special color
-            SiteProperty(
-              context: context,
-              size: size,
-              sitePropertyTypes: const [SitePropertyType.color],
-              propertyTitle: 'Cor de desaque',
-              propertyColor: _siteMainData.specialColor,
-              onChangedPropertyColor: (selectedColor) => _siteMainData.specialColor = selectedColor!,
-            ),
-            const SizedBox(height: 10),
-            // regular font color
-            SiteProperty(
-              context: context,
-              size: size,
-              sitePropertyTypes: const [SitePropertyType.color],
-              propertyTitle: 'Cor da fonte comum',
-              propertyColor: _siteMainData.regularFontColor,
-              onChangedPropertyColor: (selectedColor) => () => _siteMainData.regularFontColor = selectedColor!,
-            ),
-            const SizedBox(height: 10),
-            // special font color
-            SiteProperty(
-              context: context,
-              size: size,
-              sitePropertyTypes: const [SitePropertyType.color],
-              propertyTitle: 'Cor da fonte destaque',
-              propertyColor: _siteMainData.specialFontColor,
-              onChangedPropertyColor: (selectedColor) => () => _siteMainData.specialFontColor = selectedColor!,
             ),
             const SizedBox(height: 10),
             // About me

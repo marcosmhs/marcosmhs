@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:marcosmhs/features/admin_area/hive_controller.dart';
-import 'package:marcosmhs/features/admin_area/main_area.dart';
 import 'package:marcosmhs/features/admin_area/user/login_screen.dart';
+import 'package:marcosmhs/features/admin_area/main_area.dart';
 
 class InternalLandingScreen extends StatefulWidget {
-  const InternalLandingScreen({Key? key}) : super(key: key);
+  const InternalLandingScreen({super.key});
 
   @override
   State<InternalLandingScreen> createState() => _InternalLandingScreenState();

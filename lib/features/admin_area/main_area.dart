@@ -4,7 +4,7 @@ import 'package:marcosmhs/features/admin_area/user/user.dart';
 
 class MainArea extends StatefulWidget {
   final User? user;
-  const MainArea({Key? key, this.user}) : super(key: key);
+  const MainArea({super.key, this.user});
 
   @override
   State<MainArea> createState() => _MainAreaState();

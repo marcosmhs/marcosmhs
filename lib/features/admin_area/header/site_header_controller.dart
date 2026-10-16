@@ -11,7 +11,10 @@ class SiteHeaderController {
       return SiteHeaderText(siteName: Consts.siteName);
     }
 
-    final userDataRef = await FirebaseFirestore.instance.collection(FirebaseConsts.headerTextCollectionName).doc(siteName).get();
+    final userDataRef = await FirebaseFirestore.instance
+        .collection(FirebaseConsts.headerTextCollectionName)
+        .doc(siteName)
+        .get();
     final userData = userDataRef.data();
 
     if (userData == null) {
@@ -21,7 +24,7 @@ class SiteHeaderController {
     return SiteHeaderText.fromMap(map: userData);
   }
 
-  Future<TebCustomReturn> save({required SiteHeaderText mainData}) async {
+  Future<TebReturn> save({required SiteHeaderText mainData}) async {
     try {
       mainData.updateDate = DateTime.now();
 
@@ -30,9 +33,9 @@ class SiteHeaderController {
           .doc(mainData.siteName)
           .set(mainData.toMap);
 
-      return TebCustomReturn.sucess;
+      return TebReturn.success;
     } catch (e) {
-      return TebCustomReturn.error(e.toString());
+      return TebReturn.error(e.toString());
     }
   }
 }

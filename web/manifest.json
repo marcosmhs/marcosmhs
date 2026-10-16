@@ -1,11 +1,11 @@
 {
-    "name": "marcosmhs",
-    "short_name": "marcosmhs",
-    "start_url": ".",
+    "name": "Admin marcosmhs",
+    "short_name": "Admin",
+    "start_url": "/admin/",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Área administrativa do site marcosmhs",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

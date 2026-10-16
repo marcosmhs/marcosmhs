@@ -30,12 +30,6 @@ class SiteMainData {
     String? articleAreaTitle,
     String? projectsAreaTitle,
   }) {
-    this.backgroundColor = backgroundColor ?? Consts.stdBackgroundColor;
-    this.secundaryBackgroundColor = secundaryBackgroundColor ?? Consts.stdSecundaryBackgroundColor;
-    this.specialColor = specialColor ?? Consts.stdSpecialColor;
-    this.regularFontColor = regularFontColor ?? Consts.stdRegularFontColor;
-    this.specialFontColor = specialFontColor ?? Consts.stdSpecialFontColor;
-
     this.aboutMeAreaTitle = aboutMeAreaTitle ?? Consts.stdAboutMeAreaTitle;
     this.experienceAreaTitle = experienceAreaTitle ?? Consts.stdExperienceAreaTitle;
     this.articleAreaTitle = articleAreaTitle ?? Consts.stdArticleAreaTitle;
@@ -52,11 +46,6 @@ class SiteMainData {
     u = SiteMainData(
       siteName: map['siteName'] ?? '',
       updateDate: map['updateDate'] == null ? null : DateTime.tryParse(map['updateDate']),
-      backgroundColor: map['backgroundColor'] == null ? Consts.stdBackgroundColor : Color(map['backgroundColor']),
-      secundaryBackgroundColor: map['secundaryBackgroundColor'] == null ? Consts.stdSecundaryBackgroundColor : Color(map['secundaryBackgroundColor']),
-      specialColor: map['specialColor'] == null ? Consts.stdSpecialColor : Color(map['specialColor']),
-      regularFontColor: map['regularFontColor'] == null ? Consts.stdRegularFontColor : Color(map['regularFontColor']),
-      specialFontColor: map['specialFontColor'] == null ? Consts.stdSpecialFontColor : Color(map['specialFontColor']),
       aboutMeAreaTitle: map['aboutMeAreaTitle'] ?? '',
       experienceAreaTitle: map['experienceAreaTitle'] ?? '',
       articleAreaTitle: map['articleAreaTitle'] ?? '',
@@ -70,11 +59,11 @@ class SiteMainData {
     r = {
       'siteName': siteName,
       'updateDate': updateDate.toString(),
-      'backgroundColor': backgroundColor.value,
-      'secundaryBackgroundColor': secundaryBackgroundColor.value,
-      'specialColor': specialColor.value,
-      'regularFontColor': regularFontColor.value,
-      'specialFontColor': specialFontColor.value,
+      'backgroundColor': backgroundColor.toARGB32(),
+      'secundaryBackgroundColor': secundaryBackgroundColor.toARGB32(),
+      'specialColor': specialColor.toARGB32(),
+      'regularFontColor': regularFontColor.toARGB32(),
+      'specialFontColor': specialFontColor.toARGB32(),
       'aboutMeAreaTitle': aboutMeAreaTitle,
       'experienceAreaTitle': experienceAreaTitle,
       'articleAreaTitle': articleAreaTitle,

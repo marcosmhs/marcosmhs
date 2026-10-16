@@ -25,13 +25,9 @@ class IntroTextData {
     Color? backgroundColor,
     this.introText = '',
     double? fontSize,
-    Color? fontColor,
     FontWeight? fontWeight,
-    this.desktop = true,
-    this.mobile = true,
     this.status = IntroTextDataStatus.created,
   }) {
-    this.fontColor = fontColor ?? Consts.stdIntroTextFontColor;
     this.fontWeight = fontWeight ?? Consts.stdIntroTextFontWeight;
     this.fontSize = fontSize ?? Consts.stdIntroTextFontSize;
   }
@@ -45,10 +41,7 @@ class IntroTextData {
       updateDate: map['updateDate'] == null ? null : DateTime.tryParse(map['updateDate']),
       introText: map['introText'] ?? '',
       fontSize: map['fontSize'] ?? Consts.stdIntroTextFontSize,
-      fontColor: map['fontColor'] == null ? Consts.stdIntroTextFontColor : Color(map['fontColor']),
       fontWeight: map['fontWeight'] == null ? Consts.stdIntroTextFontWeight : FontWeight.values[map['fontWeight']],
-      desktop: map['desktop'],
-      mobile: map['mobile'],
       status: map['id'] == '' ? IntroTextDataStatus.created : IntroTextDataStatus.saved,
     );
     return u;
@@ -62,10 +55,7 @@ class IntroTextData {
       'updateDate': updateDate.toString(),
       'introText': introText,
       'fontSize': fontSize,
-      'fontColor': fontColor.value,
       'fontWeight': fontWeight.index,
-      'desktop': desktop,
-      'mobile': mobile,
     };
 
     return r;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:marcosmhs/features/admin_area/user/user.dart';
 import 'package:marcosmhs/features/admin_area/vertical_menu.dart';
-import 'package:marcosmhs/features/user/user.dart';
-import 'package:teb_package/screen_elements/teb_custom_scaffold.dart';
-import 'package:teb_package/visual_elements/teb_text.dart';
+import 'package:teb_package/control_widgets/teb_text.dart';
+import 'package:teb_package/screen_widgets/teb_scaffold.dart';
 
 class MainAreaStructure extends StatefulWidget {
   final User user;
@@ -27,17 +27,20 @@ class MainAreaStructure extends StatefulWidget {
 class _MainAreaStructureState extends State<MainAreaStructure> {
   @override
   Widget build(BuildContext context) {
-    return TebCustomScaffold(
+    return TebScaffold(
       title: const Text('That Exotic Bug'),
       responsive: false,
       showAppBar: widget.mobile,
-      drawer: widget.mobile ? VerticalMenu(mobile: widget.mobile, user: widget.user, size: widget.size) : null,
+      drawer: widget.mobile
+          ? VerticalMenu(mobile: widget.mobile, user: widget.user, size: widget.size)
+          : null,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // menu
-          if (!widget.mobile) VerticalMenu(mobile: widget.mobile, user: widget.user, size: widget.size),
+          if (!widget.mobile)
+            VerticalMenu(mobile: widget.mobile, user: widget.user, size: widget.size),
           // área principal
           Container(
             padding: const EdgeInsets.all(10),
@@ -46,8 +49,8 @@ class _MainAreaStructureState extends State<MainAreaStructure> {
                 ? Center(
                     child: TebText(
                     widget.infoMessage,
-                    textColor: Theme.of(context).colorScheme.primary,
-                    textSize: 50,
+                    fontColor: Theme.of(context).colorScheme.primary,
+                    fontSize: 50,
                   ))
                 : SingleChildScrollView(child: widget.widget ?? const Text('')),
           )

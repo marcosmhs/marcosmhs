@@ -9,7 +9,8 @@ class SiteIntroTextController with ChangeNotifier {
   Future<List<IntroTextData>> getData({required String siteName}) async {
     if (siteName.isEmpty) return [];
 
-    final dataRef = await FirebaseFirestore.instance.collection(FirebaseConsts.introTextCollectionName).get();
+    final dataRef =
+        await FirebaseFirestore.instance.collection(FirebaseConsts.introTextCollectionName).get();
 
     final dataList = dataRef.docs.map((doc) => doc.data()).toList();
 
@@ -20,7 +21,7 @@ class SiteIntroTextController with ChangeNotifier {
     return r;
   }
 
-  Future<TebCustomReturn> save({required List<IntroTextData> introTextDataList}) async {
+  Future<TebReturn> save({required List<IntroTextData> introTextDataList}) async {
     try {
       for (var introTextData in introTextDataList) {
         introTextData.updateDate = DateTime.now();
@@ -35,9 +36,9 @@ class SiteIntroTextController with ChangeNotifier {
             .set(introTextData.toMap);
       }
 
-      return TebCustomReturn.sucess;
+      return TebReturn.success;
     } catch (e) {
-      return TebCustomReturn.error(e.toString());
+      return TebReturn.error(e.toString());
     }
   }
 }

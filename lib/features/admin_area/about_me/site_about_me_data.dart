@@ -102,16 +102,10 @@ class AboutMeTechnology {
 class AboutMeText {
   late String id;
   late String siteName;
-
   late DateTime? updateDate;
-
   late String aboutMeText;
   late double fontSize;
-  late Color fontColor;
   late FontWeight fontWeight;
-
-  late bool desktop;
-  late bool mobile;
   late AboutMeItemStatus status;
 
   AboutMeText({
@@ -121,13 +115,9 @@ class AboutMeText {
     Color? backgroundColor,
     this.aboutMeText = '',
     double? fontSize,
-    Color? fontColor,
     FontWeight? fontWeight,
-    this.desktop = true,
-    this.mobile = true,
     this.status = AboutMeItemStatus.created,
   }) {
-    this.fontColor = fontColor ?? Consts.stdIntroTextFontColor;
     this.fontWeight = fontWeight ?? Consts.stdIntroTextFontWeight;
     this.fontSize = fontSize ?? Consts.stdIntroTextFontSize;
   }
@@ -141,10 +131,7 @@ class AboutMeText {
       updateDate: map['updateDate'] == null ? null : DateTime.tryParse(map['updateDate']),
       aboutMeText: map['aboutMeText'] ?? '',
       fontSize: map['fontSize'] ?? Consts.stdIntroTextFontSize,
-      fontColor: map['fontColor'] == null ? Consts.stdIntroTextFontColor : Color(map['fontColor']),
       fontWeight: map['fontWeight'] == null ? Consts.stdIntroTextFontWeight : FontWeight.values[map['fontWeight']],
-      desktop: map['desktop'],
-      mobile: map['mobile'],
       status: map['id'] == '' ? AboutMeItemStatus.created : AboutMeItemStatus.saved,
     );
     return u;
@@ -158,10 +145,7 @@ class AboutMeText {
       'updateDate': updateDate.toString(),
       'aboutMeText': aboutMeText,
       'fontSize': fontSize,
-      'fontColor': fontColor.value,
       'fontWeight': fontWeight.index,
-      'desktop': desktop,
-      'mobile': mobile,
     };
 
     return r;
