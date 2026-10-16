@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/release
 android/app/google-services.json
 lib/firebase_options.dart
+
+# Saída do build do Hosting (scripts/build-hosting.js)
+/hosting/

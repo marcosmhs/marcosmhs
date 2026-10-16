@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:marcosmhs/theme_data.dart';
-import 'package:teb_package/visual_elements/material_color_picker/teb_material_color_picker.dart';
-import 'package:teb_package/visual_elements/teb_buttons_line.dart';
-import 'package:teb_package/visual_elements/teb_checkbox.dart';
-import 'package:teb_package/visual_elements/teb_dropdown_menu.dart';
-import 'package:teb_package/visual_elements/teb_text.dart';
-import 'package:teb_package/visual_elements/teb_text_form_field.dart';
+import 'package:teb_package/control_widgets/teb_buttons_line.dart';
+import 'package:teb_package/control_widgets/teb_dropdown_menu.dart';
+import 'package:teb_package/control_widgets/teb_text.dart';
+import 'package:teb_package/control_widgets/teb_text_edit.dart';
 
-enum SitePropertyType { text, color, numeric, fontWeigh, device }
+enum SitePropertyType { text, numeric, fontWeigh}
 
 class SiteProperty extends StatefulWidget {
   final BuildContext context;
@@ -19,10 +16,7 @@ class SiteProperty extends StatefulWidget {
   final bool propertyMemoInput;
   final String? propertyValue;
   final double? propertyFontSize;
-  final bool propertyMobile;
-  final bool propertyDesktop;
   final FontWeight? propertyFontWeight;
-  final Color? propertyColor;
 
   final Function(String? value)? onChangedProperty;
   final Function(Color? value)? onChangedPropertyColor;
@@ -46,12 +40,9 @@ class SiteProperty extends StatefulWidget {
     required this.sitePropertyTypes,
     required this.propertyTitle,
     this.propertyValue,
-    this.propertyColor,
     this.propertyMemoInput = false,
     this.propertyFontSize,
     this.propertyFontWeight,
-    this.propertyMobile = true,
-    this.propertyDesktop = true,
     this.onChangedProperty,
     this.onChangedPropertyColor,
     this.onChangedPropertyFontSize,
@@ -74,12 +65,9 @@ class _SitePropertyState extends State<SiteProperty> {
   final TextEditingController _textPropertyController = TextEditingController();
   final TextEditingController _textPropertyFontSizeController = TextEditingController();
 
-  var _propertyColorButtonBackgroundColor = Colors.transparent;
-
   @override
   void initState() {
     super.initState();
-    _propertyColorButtonBackgroundColor = widget.propertyColor ?? Colors.transparent;
     _textPropertyController.text = widget.propertyValue ?? '';
     if (widget.propertyFontSize != null) {
       _textPropertyFontSizeController.text = widget.propertyFontSize.toString();
@@ -115,8 +103,8 @@ class _SitePropertyState extends State<SiteProperty> {
                   children: [
                     TebText(
                       widget.propertyTitle,
-                      textColor: Theme.of(context).primaryColorLight,
-                      textSize: 20,
+                      fontColor: Theme.of(context).primaryColorLight,
+                      fontSize: 20,
                       padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
                   ],
@@ -140,7 +128,9 @@ class _SitePropertyState extends State<SiteProperty> {
                     Row(
                       children: [
                         // font size
-                        if (widget.sitePropertyTypes.where((s) => s == SitePropertyType.numeric).isNotEmpty)
+                        if (widget.sitePropertyTypes
+                            .where((s) => s == SitePropertyType.numeric)
+                            .isNotEmpty)
                           SizedBox(
                             width: 150,
                             child: TebTextEdit(
@@ -150,69 +140,33 @@ class _SitePropertyState extends State<SiteProperty> {
                               validator: widget.onValidatePropertyFontSize,
                             ),
                           ),
-                        if (widget.sitePropertyTypes.where((s) => s == SitePropertyType.numeric).isNotEmpty) const Spacer(),
+                        if (widget.sitePropertyTypes
+                            .where((s) => s == SitePropertyType.numeric)
+                            .isNotEmpty)
+                          const Spacer(),
 
                         // font weigh
-                        if (widget.sitePropertyTypes.where((s) => s == SitePropertyType.fontWeigh).isNotEmpty)
+                        if (widget.sitePropertyTypes
+                            .where((s) => s == SitePropertyType.fontWeigh)
+                            .isNotEmpty)
                           TebDropDownMenu(
                             selectedValue: widget.propertyFontWeight,
                             itens: FontWeight.values,
-                            text: 'Selecione a fonte',
+                            label: 'Selecione a fonte',
                             onSelected: (selectedValue) {
                               setState(() => widget.onFontWeightSelected!(selectedValue));
                             },
                           ),
-                        if (widget.sitePropertyTypes.where((s) => s == SitePropertyType.fontWeigh).isNotEmpty) const Spacer(),
+                        if (widget.sitePropertyTypes
+                            .where((s) => s == SitePropertyType.fontWeigh)
+                            .isNotEmpty)
+                          const Spacer(),
 
-                        // color selection
-                        if (widget.sitePropertyTypes.where((s) => s == SitePropertyType.color).isNotEmpty)
-                          SizedBox(
-                            width: 220,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(backgroundColor: _propertyColorButtonBackgroundColor),
-                              onPressed: () {
-                                TebMaterialColorPicker.showColorPicker(
-                                  context: context,
-                                  pickedColor: widget.propertyColor ?? thatExoticBugTheme.colorScheme.primary,
-                                ).then((selectecColor) {
-                                  setState(() => _propertyColorButtonBackgroundColor = selectecColor);
-                                  widget.onChangedPropertyColor!(selectecColor);
-                                });
-                              },
-                              child: const Text('Selecione a cor'),
-                            ),
-                          ),
                       ],
                     ),
                   ],
                 ),
               ),
-
-              // Mobile / desktop
-              if (widget.sitePropertyTypes.where((s) => s == SitePropertyType.device).isNotEmpty)
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      child: TebCheckBox(
-                        context: context,
-                        value: widget.propertyDesktop,
-                        title: 'Desktop',
-                        onChanged: (checked) => setState(() => widget.onDeviceDesktopSelected!(checked)),
-                      ),
-                    ),
-                    const SizedBox(width: 50),
-                    SizedBox(
-                      width: 150,
-                      child: TebCheckBox(
-                        context: context,
-                        value: widget.propertyMobile,
-                        title: 'Mobile',
-                        onChanged: (checked) => setState(() => widget.onDeviceMobileSelected!(checked)),
-                      ),
-                    ),
-                  ],
-                ),
             ],
           ),
         ),

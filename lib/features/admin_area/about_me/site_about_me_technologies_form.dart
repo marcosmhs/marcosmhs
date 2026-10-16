@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:marcosmhs/features/admin_area/site_publisher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marcosmhs/consts.dart';
 import 'package:marcosmhs/features/admin_area/main_area_structure.dart';
@@ -28,14 +29,15 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
     List<AboutMeTechnology> aboutMeTechnologyListBkp = [];
     aboutMeTechnologyListBkp.addAll(_siteAboutMeTechnologyList);
 
-    aboutMeTechnologyListBkp.add(AboutMeTechnology(siteName: Consts.siteName, type: aboutMeTechnologyType));
+    aboutMeTechnologyListBkp
+        .add(AboutMeTechnology(siteName: Consts.siteName, type: aboutMeTechnologyType));
     _siteAboutMeTechnologyList.clear();
     _siteAboutMeTechnologyList.addAll(aboutMeTechnologyListBkp);
     setState(() {});
   }
 
   void _setTechnologyToRemove({required AboutMeTechnology aboutMeTechnology}) {
-    TebCustomDialog(context: context).confirmationDialog(message: 'Excluir?').then((value) {
+    TebDialog(context: context).confirmationDialog(message: 'Excluir?').then((value) {
       if (value == true) {
         if (aboutMeTechnology.id.isEmpty) {
           setState(() => _siteAboutMeTechnologyList.remove(aboutMeTechnology));
@@ -56,18 +58,20 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
       // salva os dados
       _formKey.currentState?.save();
       var siteAboutMeController = SiteAboutMeController();
-      TebCustomReturn retorno;
+      TebReturn retorno;
       try {
-        retorno = await siteAboutMeController.saveAboutTechnologyList(aboutMeTechnologyList: _siteAboutMeTechnologyList);
+        retorno = await siteAboutMeController.saveAboutTechnologyList(
+            aboutMeTechnologyList: _siteAboutMeTechnologyList);
 
         if (retorno.returnType == TebReturnType.sucess) {
-          TebCustomMessage.sucess(context, message: 'Dados alterados com sucesso');
+          TebMessage.success(context, message: 'Dados alterados com sucesso');
+          SitePublisher.instance.requestPublish();
           Navigator.of(context).pushReplacementNamed(Routes.mainScreen, arguments: {'user': _user});
         }
 
         // se houve um erro no login ou no cadastro exibe o erro
         if (retorno.returnType == TebReturnType.error) {
-          TebCustomMessage.error(context, message: retorno.message);
+          TebMessage.error(context, message: retorno.message);
         }
       } finally {
         _saveingData = false;
@@ -82,7 +86,9 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
       _user = arguments['user'] ?? User();
       _initializing = false;
 
-      SiteAboutMeController().getAboutMeTechnologyListData(siteName: Consts.siteName).then((introTechList) {
+      SiteAboutMeController()
+          .getAboutMeTechnologyListData(siteName: Consts.siteName)
+          .then((introTechList) {
         if (introTechList.isEmpty) introTechList.add(AboutMeTechnology(siteName: Consts.siteName));
         setState(() => _siteAboutMeTechnologyList.addAll(introTechList));
       });
@@ -113,7 +119,8 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
                 ),
                 TebButton(
                   label: 'Salvar',
-                  icon: FaIcon(FontAwesomeIcons.floppyDisk, color: Theme.of(context).colorScheme.background),
+                  icon: FaIcon(FontAwesomeIcons.floppyDisk,
+                      color: Theme.of(context).colorScheme.surface),
                   onPressed: () => _submit(),
                 ),
               ],
@@ -123,30 +130,38 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
             // technologies column
             Row(
               children: [
-                const TebText('Tecnologias Conhecidas - Desenvolvimento', textSize: 20),
+                const TebText('Tecnologias Conhecidas - Desenvolvimento', fontSize: 20),
                 const Spacer(),
                 TebButton(
                   label: 'Adicionar',
-                  icon: FaIcon(FontAwesomeIcons.plus, color: Theme.of(context).colorScheme.background),
-                  onPressed: () => _addAboutMeTechnologyDataList(aboutMeTechnologyType: AboutMeTechnologyType.development),
+                  icon: FaIcon(FontAwesomeIcons.plus, color: Theme.of(context).colorScheme.surface),
+                  onPressed: () => _addAboutMeTechnologyDataList(
+                      aboutMeTechnologyType: AboutMeTechnologyType.development),
                 ),
               ],
             ),
-            technologyList(context: context, size: size, aboutMeTechnologyType: AboutMeTechnologyType.development),
+            technologyList(
+                context: context,
+                size: size,
+                aboutMeTechnologyType: AboutMeTechnologyType.development),
             const SizedBox(height: 10),
             // technologies column
             Row(
               children: [
-                const TebText('Tecnologias Conhecidas - Data Science', textSize: 20),
+                const TebText('Tecnologias Conhecidas - Data Science', fontSize: 20),
                 const Spacer(),
                 TebButton(
                   label: 'Adicionar',
-                  icon: FaIcon(FontAwesomeIcons.plus, color: Theme.of(context).colorScheme.background),
-                  onPressed: () => _addAboutMeTechnologyDataList(aboutMeTechnologyType: AboutMeTechnologyType.dataScience),
+                  icon: FaIcon(FontAwesomeIcons.plus, color: Theme.of(context).colorScheme.surface),
+                  onPressed: () => _addAboutMeTechnologyDataList(
+                      aboutMeTechnologyType: AboutMeTechnologyType.dataScience),
                 ),
               ],
             ),
-            technologyList(context: context, size: size, aboutMeTechnologyType: AboutMeTechnologyType.dataScience),
+            technologyList(
+                context: context,
+                size: size,
+                aboutMeTechnologyType: AboutMeTechnologyType.dataScience),
           ],
         ),
       ),
@@ -158,7 +173,8 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
     required Size size,
     required AboutMeTechnologyType aboutMeTechnologyType,
   }) {
-    var localSiteAboutMeTechnologyList = _siteAboutMeTechnologyList.where((t) => t.type == aboutMeTechnologyType).toList();
+    var localSiteAboutMeTechnologyList =
+        _siteAboutMeTechnologyList.where((t) => t.type == aboutMeTechnologyType).toList();
     return SizedBox(
       height: size.height * 0.8,
       width: size.width * 0.78,
@@ -171,15 +187,16 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
               SiteProperty(
                 context: context,
                 size: size,
-                sitePropertyTypes: const [SitePropertyType.device, SitePropertyType.text],
+                sitePropertyTypes: [SitePropertyType.text],
                 propertyTitle: '',
                 propertyValue: localSiteAboutMeTechnologyList[index].technologyName,
-                propertyDesktop: localSiteAboutMeTechnologyList[index].desktop,
-                propertyMobile: localSiteAboutMeTechnologyList[index].mobile,
                 propertyMemoInput: false,
-                onChangedProperty: (value) => localSiteAboutMeTechnologyList[index].technologyName = value!,
-                onDeviceMobileSelected: (selected) => setState(() => localSiteAboutMeTechnologyList[index].mobile = selected!),
-                onDeviceDesktopSelected: (selected) => setState(() => localSiteAboutMeTechnologyList[index].desktop = selected!),
+                onChangedProperty: (value) =>
+                    localSiteAboutMeTechnologyList[index].technologyName = value!,
+                onDeviceMobileSelected: (selected) =>
+                    setState(() => localSiteAboutMeTechnologyList[index].mobile = selected!),
+                onDeviceDesktopSelected: (selected) =>
+                    setState(() => localSiteAboutMeTechnologyList[index].desktop = selected!),
                 onValidateProperty: (value) {
                   final finalValue = value ?? '';
                   if (finalValue.trim().isEmpty) return 'Informe o nome';
@@ -187,8 +204,10 @@ class _SiteAboutMeTechnologiestFormState extends State<SiteAboutMeTechnologiestF
                 },
                 showActionButton: true,
                 actionButtonLabel: 'Remover',
-                actionButtonIcon: FaIcon(FontAwesomeIcons.trashCan, color: Theme.of(context).colorScheme.background),
-                actionButtonPressed: () => _setTechnologyToRemove(aboutMeTechnology: localSiteAboutMeTechnologyList[index]),
+                actionButtonIcon:
+                    FaIcon(FontAwesomeIcons.trashCan, color: Theme.of(context).colorScheme.surface),
+                actionButtonPressed: () => _setTechnologyToRemove(
+                    aboutMeTechnology: localSiteAboutMeTechnologyList[index]),
               ),
             ],
           );

@@ -7,12 +7,10 @@ class SiteHeaderText {
   late DateTime? updateDate;
   late String name;
   late double nameFontSize;
-  late Color nameColor;
   late FontWeight nameFontWeight;
 
   late String nameComplement;
   late double nameComplementFontSize;
-  late Color nameComplementColor;
   late FontWeight nameComplementFontWeight;
 
   late String email;
@@ -36,11 +34,9 @@ class SiteHeaderText {
     this.urlLinkedin = '',
     this.urlMedium = '',
   }) {
-    this.nameColor = nameColor ?? Consts.stdNameFontColor;
     this.nameFontWeight = nameFontWeight ?? Consts.stdNameFontWeight;
     this.nameFontSize = nameFontSize ?? Consts.stdNameFontSize;
 
-    this.nameComplementColor = nameComplementColor ?? Consts.stdNameComplementFontColor;
     this.nameComplementFontSize = nameComplementFontSize ?? Consts.stdNameComplementFontSize;
     this.nameComplementFontWeight = nameComplementFontWeight ?? Consts.stdNameComplementFontWeight;
   }
@@ -57,12 +53,11 @@ class SiteHeaderText {
       updateDate: map['updateDate'] == null ? null : DateTime.tryParse(map['updateDate']),
       name: map['name'] ?? '',
       nameFontSize: map['nameFontSize'] ?? Consts.stdNameFontSize,
-      nameColor: map['nameColor'] == null ? Consts.stdNameFontColor : Color(map['nameColor']),
-      nameFontWeight: map['nameFontWeight'] == null ? Consts.stdNameFontWeight : FontWeight.values[map['nameFontWeight']],
+      nameFontWeight: map['nameFontWeight'] == null
+          ? Consts.stdNameFontWeight
+          : FontWeight.values[map['nameFontWeight']],
       nameComplement: map['nameComplement'] ?? '',
       nameComplementFontSize: map['nameComplementFontSize'] ?? Consts.stdNameComplementFontSize,
-      nameComplementColor:
-          map['nameComplementColor'] == null ? Consts.stdNameComplementFontColor : Color(map['nameComplementColor']),
       nameComplementFontWeight: map['nameComplementFontWeight'] == null
           ? Consts.stdNameComplementFontWeight
           : FontWeight.values[map['nameComplementFontWeight']],
@@ -82,10 +77,8 @@ class SiteHeaderText {
       'name': name,
       'NameFontSize': nameFontSize,
       'nameFontWeight': nameFontWeight.index,
-      'NameColor': nameColor.value,
       'nameComplement': nameComplement,
       'nameComplementFontSize': nameComplementFontSize,
-      'nameComplementColor': nameComplementColor.value,
       'email': email,
       'urlGitGub': urlGitGub,
       'urlLinkedin': urlLinkedin,

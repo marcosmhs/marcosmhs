@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:marcosmhs/features/admin_area/site_publisher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marcosmhs/consts.dart';
 import 'package:marcosmhs/features/admin_area/main_area_structure.dart';
@@ -9,9 +10,9 @@ import 'package:marcosmhs/features/public_area/routes.dart';
 import 'package:marcosmhs/features/admin_area/header/site_header_controller.dart';
 import 'package:marcosmhs/features/admin_area/header/site_header_data.dart';
 import 'package:marcosmhs/features/admin_area/widgets/site_property_widget.dart';
-import 'package:teb_package/messaging/teb_custom_message.dart';
+import 'package:teb_package/control_widgets/teb_buttons_line.dart';
+import 'package:teb_package/messaging/teb_message.dart';
 import 'package:teb_package/util/teb_return.dart';
-import 'package:teb_package/visual_elements/teb_buttons_line.dart';
 
 class SiteHeaderTextForm extends StatefulWidget {
   const SiteHeaderTextForm({super.key});
@@ -38,17 +39,18 @@ class _SiteHeaderTextFormState extends State<SiteHeaderTextForm> {
       // salva os dados
       _formKey.currentState?.save();
       var siteHeaderController = SiteHeaderController();
-      TebCustomReturn retorno;
+      TebReturn retorno;
       try {
         retorno = await siteHeaderController.save(mainData: _siteHeader);
         if (retorno.returnType == TebReturnType.sucess) {
-          TebCustomMessage.sucess(context, message: 'Dados alterados com sucesso');
+          TebMessage.success(context, message: 'Dados alterados com sucesso');
+          SitePublisher.instance.requestPublish();
           Navigator.of(context).pushReplacementNamed(Routes.mainScreen, arguments: {'user': _user});
         }
 
         // se houve um erro no login ou no cadastro exibe o erro
         if (retorno.returnType == TebReturnType.error) {
-          TebCustomMessage.error(context, message: retorno.message);
+          TebMessage.error(context, message: retorno.message);
         }
       } finally {
         _saveingData = false;
@@ -89,7 +91,8 @@ class _SiteHeaderTextFormState extends State<SiteHeaderTextForm> {
                 ),
                 TebButton(
                   label: 'Salvar',
-                  icon: FaIcon(FontAwesomeIcons.floppyDisk, color: Theme.of(context).colorScheme.background),
+                  icon: FaIcon(FontAwesomeIcons.floppyDisk,
+                      color: Theme.of(context).colorScheme.surface),
                   onPressed: () => _submit(),
                 ),
               ],
@@ -101,7 +104,6 @@ class _SiteHeaderTextFormState extends State<SiteHeaderTextForm> {
               size: size,
               sitePropertyTypes: const [
                 SitePropertyType.text,
-                SitePropertyType.color,
                 SitePropertyType.numeric,
                 SitePropertyType.fontWeigh
               ],
@@ -109,9 +111,7 @@ class _SiteHeaderTextFormState extends State<SiteHeaderTextForm> {
               propertyValue: _siteHeader.name,
               propertyFontSize: _siteHeader.nameFontSize,
               propertyFontWeight: _siteHeader.nameFontWeight,
-              propertyColor: _siteHeader.nameColor,
               onChangedProperty: (value) => _siteHeader.name = value ?? '',
-              onChangedPropertyColor: (selectedColor) => _siteHeader.nameColor = selectedColor!,
               onChangedPropertyFontSize: (value) {
                 _siteHeader.nameFontSize = double.tryParse(value ?? '30') ?? 30;
               },
@@ -128,17 +128,14 @@ class _SiteHeaderTextFormState extends State<SiteHeaderTextForm> {
               size: size,
               sitePropertyTypes: const [
                 SitePropertyType.text,
-                SitePropertyType.color,
                 SitePropertyType.numeric,
                 SitePropertyType.fontWeigh,
               ],
               propertyTitle: 'Complemento',
               propertyValue: _siteHeader.nameComplement,
-              propertyColor: _siteHeader.nameComplementColor,
               propertyFontSize: _siteHeader.nameComplementFontSize,
               propertyFontWeight: _siteHeader.nameComplementFontWeight,
               onChangedProperty: (value) => _siteHeader.nameComplement = value ?? '',
-              onChangedPropertyColor: (selectedColor) => _siteHeader.nameComplementColor = selectedColor!,
               onChangedPropertyFontSize: (value) {
                 _siteHeader.nameComplementFontSize = double.tryParse(value ?? '30') ?? 30;
               },

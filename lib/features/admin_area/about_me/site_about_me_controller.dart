@@ -12,7 +12,10 @@ class SiteAboutMeController with ChangeNotifier {
       return AboutMeData(siteName: Consts.siteName);
     }
 
-    final dataRef = await FirebaseFirestore.instance.collection(FirebaseConsts.aboutMeDataCollectionName).doc(siteName).get();
+    final dataRef = await FirebaseFirestore.instance
+        .collection(FirebaseConsts.aboutMeDataCollectionName)
+        .doc(siteName)
+        .get();
     final data = dataRef.data();
 
     if (data == null) {
@@ -25,7 +28,8 @@ class SiteAboutMeController with ChangeNotifier {
   Future<List<AboutMeText>> getAboutMeTextListData({required String siteName}) async {
     if (siteName.isEmpty) return [];
 
-    final dataRef = await FirebaseFirestore.instance.collection(FirebaseConsts.aboutMeTextCollectionName).get();
+    final dataRef =
+        await FirebaseFirestore.instance.collection(FirebaseConsts.aboutMeTextCollectionName).get();
 
     final dataList = dataRef.docs.map((doc) => doc.data()).toList();
 
@@ -39,7 +43,9 @@ class SiteAboutMeController with ChangeNotifier {
   Future<List<AboutMeTechnology>> getAboutMeTechnologyListData({required String siteName}) async {
     if (siteName.isEmpty) return [];
 
-    final dataRef = await FirebaseFirestore.instance.collection(FirebaseConsts.aboutMeTechnologyCollectionName).get();
+    final dataRef = await FirebaseFirestore.instance
+        .collection(FirebaseConsts.aboutMeTechnologyCollectionName)
+        .get();
 
     final dataList = dataRef.docs.map((doc) => doc.data()).toList();
 
@@ -64,12 +70,12 @@ class SiteAboutMeController with ChangeNotifier {
     }
   }
 
-  Future<TebCustomReturn> saveAboutMeData({required AboutMeData aboutMeData}) async {
+  Future<TebReturn> saveAboutMeData({required AboutMeData aboutMeData}) async {
     try {
       if (aboutMeData.photo != null) {
         aboutMeData.profilePhotoUrl = await _savePhotoOnStorage(aboutMeData.photo!);
         if (aboutMeData.profilePhotoUrl.isEmpty) {
-          return TebCustomReturn.error('Erro ao salvar a foto');
+          return TebReturn.error('Erro ao salvar a foto');
         }
       }
       aboutMeData.updateDate = DateTime.now();
@@ -78,13 +84,13 @@ class SiteAboutMeController with ChangeNotifier {
           .doc(aboutMeData.siteName)
           .set(aboutMeData.toMap);
 
-      return TebCustomReturn.sucess;
+      return TebReturn.success;
     } catch (e) {
-      return TebCustomReturn.error(e.toString());
+      return TebReturn.error(e.toString());
     }
   }
 
-  Future<TebCustomReturn> saveAboutMeTextList({required List<AboutMeText> aboutMeTextList}) async {
+  Future<TebReturn> saveAboutMeTextList({required List<AboutMeText> aboutMeTextList}) async {
     try {
       for (var aboutMeText in aboutMeTextList) {
         aboutMeText.updateDate = DateTime.now();
@@ -99,13 +105,14 @@ class SiteAboutMeController with ChangeNotifier {
             .set(aboutMeText.toMap);
       }
 
-      return TebCustomReturn.sucess;
+      return TebReturn.success;
     } catch (e) {
-      return TebCustomReturn.error(e.toString());
+      return TebReturn.error(e.toString());
     }
   }
 
-  Future<TebCustomReturn> saveAboutTechnologyList({required List<AboutMeTechnology> aboutMeTechnologyList}) async {
+  Future<TebReturn> saveAboutTechnologyList(
+      {required List<AboutMeTechnology> aboutMeTechnologyList}) async {
     try {
       for (var aboutMeTechnology in aboutMeTechnologyList) {
         aboutMeTechnology.updateDate = DateTime.now();
@@ -120,9 +127,9 @@ class SiteAboutMeController with ChangeNotifier {
             .set(aboutMeTechnology.toMap);
       }
 
-      return TebCustomReturn.sucess;
+      return TebReturn.success;
     } catch (e) {
-      return TebCustomReturn.error(e.toString());
+      return TebReturn.error(e.toString());
     }
   }
 }

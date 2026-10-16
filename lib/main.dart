@@ -8,24 +8,25 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
+import 'package:marcosmhs/app_theme.dart';
 import 'package:marcosmhs/features/admin_area/user/login_screen.dart';
 import 'package:marcosmhs/features/admin_area/user/user.dart';
 import 'package:marcosmhs/features/admin_area/user/user_form.dart';
 import 'package:marcosmhs/features/public_area/routes.dart';
-import 'package:marcosmhs/theme_data.dart';
+
 //import 'package:marcosmhs/features/main/theme_data.dart';
 import 'package:marcosmhs/internal_landing_screen.dart';
-import 'package:marcosmhs/features/public_area/visualizations/public_area/landing_screen.dart';
 import 'package:marcosmhs/features/admin_area/main_area.dart';
 import 'package:marcosmhs/features/screen_not_found.dart';
 import 'package:marcosmhs/features/admin_area/about_me/site_about_me_form.dart';
 import 'package:marcosmhs/features/admin_area/about_me/site_about_me_technologies_form.dart';
-import 'package:marcosmhs/features/admin_area/articles/site_article_form.dart';
-import 'package:marcosmhs/features/admin_area/experience/site_experience_form.dart';
+import 'package:marcosmhs/features/admin_area/articles/article_form.dart';
+import 'package:marcosmhs/features/admin_area/content/content_form.dart';
+import 'package:marcosmhs/features/admin_area/experience/experience_form.dart';
 import 'package:marcosmhs/features/admin_area/intro_text/site_intro_text_form.dart';
 import 'package:marcosmhs/features/admin_area/main_data/site_main_data_form.dart';
 import 'package:marcosmhs/features/admin_area/header/site_header_form.dart';
-import 'package:marcosmhs/features/admin_area/projects/site_project_form.dart';
+import 'package:marcosmhs/features/admin_area/projects/project_form.dart';
 import 'firebase_options.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -60,22 +61,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  //var themeStr = await rootBundle.loadString('assets/appainter_theme.json');
-  //var themeJson = json.decode(themeStr);
-  //var themeData = ThemeDecoder.decodeThemeData(
-  //      themeJson,
-  //      validate: true,
-  //    ) ??
-  //    ThemeData();
-
-  //setUrlStrategy(XDPathUrlStrategy());
   runApp(Marcosmhs(themeData: ThemeData()));
 }
 
 class Marcosmhs extends StatefulWidget {
   final ThemeData themeData;
 
-  const Marcosmhs({Key? key, required this.themeData}) : super(key: key);
+  const Marcosmhs({super.key, required this.themeData});
 
   @override
   State<Marcosmhs> createState() => _Home();
@@ -95,13 +87,15 @@ class _Home extends State<Marcosmhs> {
         Locale('en', ''),
         Locale('pt-br', ''),
       ],
-      title: 'Marcos Silva',
+      title: 'Admin - marcosmhs',
       routes: {
-        Routes.landingScreen: (ctx) => const LandingScreen(),
+
+        // admin area
         Routes.loginScreen: (ctx) => const LoginScreen(mobile: true),
         Routes.mainScreen: (ctx) => const MainArea(),
         Routes.userForm: (ctx) => const UserForm(),
         Routes.internalLandingScreen: (ctx) => const InternalLandingScreen(),
+        Routes.landingScreen: (ctx) => const InternalLandingScreen(),
         Routes.siteHeaderTextForm: (ctx) => const SiteHeaderTextForm(),
         Routes.siteMainData: (ctx) => const SiteMainDataForm(),
         Routes.siteIntroTextForm: (ctx) => const SiteIntroTextForm(),
@@ -109,12 +103,11 @@ class _Home extends State<Marcosmhs> {
         Routes.siteAboutMeTechnologiesForm: (ctx) => const SiteAboutMeTechnologiestForm(),
         Routes.experienceForm: (ctx) => const ExperienceForm(),
         Routes.articleForm: (ctx) => const ArticleForm(),
+        Routes.contentForm: (ctx) => const ContentForm(),
         Routes.projectForm: (ctx) => const ProjectForm(),
       },
-      theme: thatExoticBugTheme,
-      //theme: widget.themeData,
-      //themeMode: ThemeMode.dark,
-      initialRoute: Routes.landingScreen,
+      theme: AppTheme.lightTheme,
+      initialRoute: Routes.internalLandingScreen,
       // Executado quando uma tela não é encontrada
       onUnknownRoute: (settings) {
         return MaterialPageRoute(builder: (_) {

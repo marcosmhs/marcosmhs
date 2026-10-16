@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:marcosmhs/features/admin_area/site_publisher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marcosmhs/consts.dart';
 import 'package:marcosmhs/features/admin_area/main_area_structure.dart';
@@ -36,7 +37,7 @@ class _SiteIntroTextFormState extends State<SiteIntroTextForm> {
   }
 
   void _setItemToRemove({required IntroTextData introTextData}) {
-    TebCustomDialog(context: context).confirmationDialog(message: 'Excluir este texto?').then((value) {
+    TebDialog(context: context).confirmationDialog(message: 'Excluir este texto?').then((value) {
       if (value == true) {
         if (introTextData.id.isEmpty) {
           setState(() => _introTextDataList.remove(introTextData));
@@ -57,17 +58,18 @@ class _SiteIntroTextFormState extends State<SiteIntroTextForm> {
       // salva os dados
       _formKey.currentState?.save();
       var siteIntroTextController = SiteIntroTextController();
-      TebCustomReturn retorno;
+      TebReturn retorno;
       try {
         retorno = await siteIntroTextController.save(introTextDataList: _introTextDataList);
         if (retorno.returnType == TebReturnType.sucess) {
-          TebCustomMessage.sucess(context, message: 'Dados alterados com sucesso');
+          TebMessage.success(context, message: 'Dados alterados com sucesso');
+          SitePublisher.instance.requestPublish();
           Navigator.of(context).pushReplacementNamed(Routes.mainScreen, arguments: {'user': _user});
         }
 
         // se houve um erro no login ou no cadastro exibe o erro
         if (retorno.returnType == TebReturnType.error) {
-          TebCustomMessage.error(context, message: retorno.message);
+          TebMessage.error(context, message: retorno.message);
         }
       } finally {
         _saveingData = false;
@@ -115,7 +117,8 @@ class _SiteIntroTextFormState extends State<SiteIntroTextForm> {
                 ),
                 TebButton(
                   label: 'Salvar',
-                  icon: FaIcon(FontAwesomeIcons.floppyDisk, color: Theme.of(context).colorScheme.background),
+                  icon: FaIcon(FontAwesomeIcons.floppyDisk,
+                      color: Theme.of(context).colorScheme.surface),
                   onPressed: () => _submit(),
                 ),
               ],
@@ -135,8 +138,10 @@ class _SiteIntroTextFormState extends State<SiteIntroTextForm> {
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: TebButton(
                             label: 'Remover',
-                            icon: FaIcon(FontAwesomeIcons.trashCan, color: Theme.of(context).colorScheme.background),
-                            onPressed: () => _setItemToRemove(introTextData: _introTextDataList[index]),
+                            icon: FaIcon(FontAwesomeIcons.trashCan,
+                                color: Theme.of(context).colorScheme.surface),
+                            onPressed: () =>
+                                _setItemToRemove(introTextData: _introTextDataList[index]),
                           ),
                         ),
                       if (_introTextDataList[index].status == IntroTextDataStatus.delete)
@@ -144,16 +149,16 @@ class _SiteIntroTextFormState extends State<SiteIntroTextForm> {
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: TebButton(
                             label: 'OK',
-                            icon: FaIcon(FontAwesomeIcons.trashCan, color: Theme.of(context).colorScheme.background),
-                            onPressed: () => _setItemToRemove(introTextData: _introTextDataList[index]),
+                            icon: FaIcon(FontAwesomeIcons.trashCan,
+                                color: Theme.of(context).colorScheme.surface),
+                            onPressed: () =>
+                                _setItemToRemove(introTextData: _introTextDataList[index]),
                           ),
                         ),
                       SiteProperty(
                         context: context,
                         size: size,
                         sitePropertyTypes: const [
-                          SitePropertyType.color,
-                          SitePropertyType.device,
                           SitePropertyType.fontWeigh,
                           SitePropertyType.numeric,
                           SitePropertyType.text,
@@ -161,18 +166,21 @@ class _SiteIntroTextFormState extends State<SiteIntroTextForm> {
                         propertyTitle: '',
                         propertyValue: _introTextDataList[index].introText,
                         propertyFontSize: _introTextDataList[index].fontSize,
-                        propertyColor: _introTextDataList[index].fontColor,
                         propertyFontWeight: _introTextDataList[index].fontWeight,
-                        propertyDesktop: _introTextDataList[index].desktop,
-                        propertyMobile: _introTextDataList[index].mobile,
                         propertyMemoInput: true,
                         onChangedProperty: (value) => _introTextDataList[index].introText = value!,
-                        onFontWeightSelected: (value) => _introTextDataList[index].fontWeight = value as FontWeight,
+                        onFontWeightSelected: (value) =>
+                            _introTextDataList[index].fontWeight = value as FontWeight,
                         onChangedPropertyFontSize: (value) => _introTextDataList[index].fontSize =
-                            value == null ? Consts.stdIntroTextFontSize : (double.tryParse(value) ?? Consts.stdIntroTextFontSize),
-                        onChangedPropertyColor: (selectedColor) => _introTextDataList[index].fontColor = selectedColor!,
-                        onDeviceMobileSelected: (selected) => setState(() => _introTextDataList[index].mobile = selected!),
-                        onDeviceDesktopSelected: (selected) => setState(() => _introTextDataList[index].desktop = selected!),
+                            value == null
+                                ? Consts.stdIntroTextFontSize
+                                : (double.tryParse(value) ?? Consts.stdIntroTextFontSize),
+                        onChangedPropertyColor: (selectedColor) =>
+                            _introTextDataList[index].fontColor = selectedColor!,
+                        onDeviceMobileSelected: (selected) =>
+                            setState(() => _introTextDataList[index].mobile = selected!),
+                        onDeviceDesktopSelected: (selected) =>
+                            setState(() => _introTextDataList[index].desktop = selected!),
                         onValidateProperty: (value) {
                           final finalValue = value ?? '';
                           if (finalValue.trim().isEmpty) return 'O texto deve ser informado';
@@ -180,7 +188,9 @@ class _SiteIntroTextFormState extends State<SiteIntroTextForm> {
                         },
                         onValidatePropertyFontSize: (value) {
                           final finalValue = value ?? '';
-                          if (finalValue.trim().isEmpty) return 'O tamanho do texto deve ser informado';
+                          if (finalValue.trim().isEmpty) {
+                            return 'O tamanho do texto deve ser informado';
+                          }
                           if (double.tryParse(value ?? '') == null) return 'Valor inválido';
                           return null;
                         },
